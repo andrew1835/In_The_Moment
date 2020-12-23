@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    
+
 </head>
+
 <body>
-  
+
     <nav>
-    <button id="discoverBtn">Discover</button>
-    <button id="contactBtn">Contact</button>
+        <button id="discoverBtn">Discover</button>
+        <button id="contactBtn">Contact</button>
     </nav>
 
     <main>
@@ -22,20 +24,20 @@
         <section id="map"></section>
         <!-- searches -->
         <section>
-            <label for = "searchCity">Search City</label>
+            <label for="searchCity">Search City</label>
             <input type="text" id="searchCity">
 
-            <label for = "date">Date</label>
+            <label for="date">Date</label>
             <input type="date" id="date">
 
-            <label for = "typeOfEvent">Type of Event</label>
+            <label for="typeOfEvent">Type of Event</label>
             <select name="typeOfEvent" id="typeOfEvent">
                 <option value="music">Music</option>
                 <option value="arts">Arts</option>
                 <option value="sports">Sports</option>
             </select>
 
-            <label for = "includeBreweries">Include Breweries in Search</label>
+            <label for="includeBreweries">Include Breweries in Search</label>
             <input type="checkbox" id="includeBreweries" value="breweries">
 
             <button id="searchBtn">Search</button>
@@ -51,10 +53,15 @@
 
 
 
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg2nH-lD0SNjYImxE4rpX9G2YZ5lyrNy4&callback=initMap&libraries=&v=weekly"
+        defer>
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
