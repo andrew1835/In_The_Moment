@@ -9,8 +9,42 @@
 </head>
 <body>
   
-    
+    <nav>
+    <button id="discoverBtn">Discover</button>
+    <button id="contactBtn">Contact</button>
+    </nav>
 
+    <main>
+        <h1>In The Moment</h1>
+        <h2>Discover Live Events and Breweries Nearby</h2>
+
+        <!-- map -->
+        <section id="map"></section>
+        <!-- searches -->
+        <section>
+            <label for = "searchCity">Search City</label>
+            <input type="text" id="searchCity">
+
+            <label for = "date">Date</label>
+            <input type="date" id="date">
+
+            <label for = "typeOfEvent">Type of Event</label>
+            <select name="typeOfEvent" id="typeOfEvent">
+                <option value="music">Music</option>
+                <option value="arts">Arts</option>
+                <option value="sports">Sports</option>
+            </select>
+
+            <label for = "includeBreweries">Include Breweries in Search</label>
+            <input type="checkbox" id="includeBreweries" value="breweries">
+
+            <button id="searchBtn">Search</button>
+        </section>
+        <!-- event recommendations -->
+        <section id="eventRecommendations"></section>
+
+        <footer></footer>
+    </main>
 
 
 
@@ -20,6 +54,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js"></script>    
     <script src="script.js"></script>
 </body>
 </html>
