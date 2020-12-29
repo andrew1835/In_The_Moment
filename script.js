@@ -1,16 +1,26 @@
-// var citiesSearched = []
+var citiesSearched = []
 
-// on the page load, grab the cities saved to local storage and find a way to display the city data (dropdown or autopopulate) in a way that is helpful / relevant to the user
+// import the string of cities in local storage
+var citiesInLocalStorage = localStorage.getItem("cities")
 
-// Hannah on the search button event
+if (citiesInLocalStorage) {
+    citiesSearched = JSON.parse(citiesInLocalStorage)
+    // find a way to display the city data (dropdown or autopopulate)
+}
 
 // onclick event to run the event search query when the user clicks the search button
 $("#searchBtn").on("click", function () {
 
     var city = $("#searchCity").val()
+    // add the new city to the local storage
+    citiesSearched.push(city)
+    localStorage.setItem("cities", JSON.stringify(citiesSearched))
+    // call the TicketMaster Ajax function
+    searchTicketMaster()
+})
 
-    console.log(city)
-
+function searchTicketMaster() {
+    // run the query based on the new city
     var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&apikey=JFMQRTKJnY1nEhUvR9DPsBdCSiWWrKBv`;
 
     $.ajax({
@@ -20,19 +30,33 @@ $("#searchBtn").on("click", function () {
         console.log(response);
     })
 
-    // search the ticketmaster object based on the date
+    // call the function to update event list based on the object 
+    updateEvents()
 
-    // search the ticketmaster object based on type of event (based on the classification by ticketmaster)
+}
 
-    // if they check "recommend breweries" then include the ajax / api search for breweries near the selected event location 
+function updateEvents(response) {
 
-    // update the google map view to zoom in on the selected city the user searches 
-    
-    // push the city search to the citiesSearched array and save to local storage
+    for (var i = 0; i < 20; i++) {
 
-    // function eventList - generate the list of events
 
-})
+
+    }
+}
+
+// search the ticketmaster object based on the date
+
+// search the ticketmaster object based on type of event (based on the classification by ticketmaster)
+
+// if they check "recommend breweries" then include the ajax / api search for breweries near the selected event location 
+
+// update the google map view to zoom in on the selected city the user searches 
+
+// push the city search to the citiesSearched array and save to local storage
+
+// function eventList - generate the list of events
+
+
 
 // Andrew on the event list 
 
