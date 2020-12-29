@@ -27,7 +27,7 @@ $("#searchBtn").on("click", function () {
     // if they check "recommend breweries" then include the ajax / api search for breweries near the selected event location 
 
     // update the google map view to zoom in on the selected city the user searches 
-
+    
     // push the city search to the citiesSearched array and save to local storage
 
     // function eventList - generate the list of events
@@ -69,7 +69,7 @@ $.ajax({
 // update map when city is searched 
 // update map when event is clicked 
 // update map if breweries are selected "yes, include" then populate map with pins of surrounding breweries
-function googleMap() {
+// function googleMap() {
 
     let map;
 
@@ -82,4 +82,4 @@ function googleMap() {
             zoom: 8,
         });
     }
-}
+// }
