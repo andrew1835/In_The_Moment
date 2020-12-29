@@ -2,9 +2,12 @@
 
 // on the page load, grab the cities saved to local storage and find a way to display the city data (dropdown or autopopulate) in a way that is helpful / relevant to the user
 
+
 // Hannah on the search button event
 
 // onclick event to run the event search query when the user clicks the search button
+
+
 $("#searchBtn").on("click", function () {
 
     var city = $("#searchCity").val()
@@ -34,10 +37,18 @@ $("#searchBtn").on("click", function () {
 
 })
 
+
+
+
+
 // Andrew on the event list 
 
-// TODO: Create 20 breaks, lines, and buttons each time
-// TODO: Format the above items 
+// TODO: Create 20 breaks, lines, and buttons each time 
+// TODO: Fill in the div with the relevant information for the event
+// TODO: Make the button functional (it should populate the map with pins relavent to the specific event the button is associated with)
+// TODO: Format the above items
+
+// You are pretty much done once you understand the NYT article. All you have to do after that is call out the correct data, print it in the div, and format it correctly 
 
 var eventItems = $(".eventList")
 var eventText = "Event filler"
@@ -47,7 +58,7 @@ $("#searchBtn").one("click", function () {
     
     
 
-    for (let i = 0; i < 21; i++) {
+    for (let i = 0; i < 20; i++) {
         var showButton = $("<button>")
         showButton.text("Show on Map")
         eventItems.append(showButton)
@@ -74,7 +85,7 @@ $("#searchBtn").one("click", function () {
 
 // if they selected yes, they would like brewery recommendations then show the breweries on the map that are near the location of the event
 
-// questions to ask: 1. Am I supposed to do the Google map stuff above, or is that Beth? 2. 
+// TODO: questions to ask: 1. Am I supposed to do the Google map stuff above, or is that Beth? 2. We need to make the search button reloads/changes the page (so that someone can enter in a different city and get a fresh page of results). Activity 13 of the APIs could be helpful here. 3. What CSS framework are we using? 
 
 // $.ajax({
 //     url: "https://api.openbrewerydb.org/breweries?by_city=sultan",
