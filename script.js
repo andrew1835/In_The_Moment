@@ -36,6 +36,28 @@ $("#searchBtn").on("click", function () {
 
 // Andrew on the event list 
 
+// TODO: Create 20 breaks, lines, and buttons each time
+// TODO: Format the above items 
+
+var eventItems = $(".eventList")
+var eventText = "Event filler"
+
+$("#searchBtn").one("click", function () {
+
+    
+    
+
+    for (let i = 0; i < 21; i++) {
+        var showButton = $("<button>")
+        showButton.text("Show on Map")
+        eventItems.append(showButton)
+        eventItems.append("<br><hr>")
+    }
+
+
+
+})
+
 // function eventList
 
 // for (var i =0; i<20; i++) {
@@ -52,12 +74,14 @@ $("#searchBtn").on("click", function () {
 
 // if they selected yes, they would like brewery recommendations then show the breweries on the map that are near the location of the event
 
-$.ajax({
-    url: "https://api.openbrewerydb.org/breweries?by_city=sultan",
-    method: "GET"
-}).then(function (response) {
-    console.log(response)
-})
+// questions to ask: 1. Am I supposed to do the Google map stuff above, or is that Beth? 2. 
+
+// $.ajax({
+//     url: "https://api.openbrewerydb.org/breweries?by_city=sultan",
+//     method: "GET"
+// }).then(function (response) {
+//     console.log(response)
+// })
 
 // update the web page to display the new event row / button(s)
 
@@ -69,17 +93,19 @@ $.ajax({
 // update map when city is searched 
 // update map when event is clicked 
 // update map if breweries are selected "yes, include" then populate map with pins of surrounding breweries
-function googleMap() {
 
-    let map;
 
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: {
-                lat: -34.397,
-                lng: 150.644
-            },
-            zoom: 8,
-        });
-    }
-}
+// function googleMap() {
+
+//     let map;
+
+//     function initMap() {
+//         map = new google.maps.Map(document.getElementById("map"), {
+//             center: {
+//                 lat: -34.397,
+//                 lng: 150.644
+//             },
+//             zoom: 8,
+//         });
+//     }
+// }
