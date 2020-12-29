@@ -1,5 +1,5 @@
 var citiesSearched = []
-
+var city = ""
 // import the string of cities in local storage
 var citiesInLocalStorage = localStorage.getItem("cities")
 
@@ -13,7 +13,7 @@ if (citiesInLocalStorage) {
 
 $("#searchBtn").on("click", function () {
 
-    var city = $("#searchCity").val()
+    city = $("#searchCity").val()
     // add the new city to the local storage
     citiesSearched.push(city)
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
@@ -37,9 +37,17 @@ function searchTicketMaster() {
 
 }
 
+
+var eventItems = $(".eventList")
+var eventText = "Event filler"
+
 function updateEvents(response) {
 
-    for (var i = 0; i < 20; i++) {
+    for (let i = 0; i < 20; i++) {
+        var showButton = $("<button>")
+        showButton.text("Show on Map")
+        eventItems.append(showButton)
+        eventItems.append("<br><hr>")
 
 
 
@@ -73,24 +81,17 @@ function updateEvents(response) {
 
 // You are pretty much done once you understand the NYT article. All you have to do after that is call out the correct data, print it in the div, and format it correctly 
 
-var eventItems = $(".eventList")
-var eventText = "Event filler"
 
-$("#searchBtn").one("click", function () {
 
     
     
 
-    for (let i = 0; i < 20; i++) {
-        var showButton = $("<button>")
-        showButton.text("Show on Map")
-        eventItems.append(showButton)
-        eventItems.append("<br><hr>")
-    }
-
-
-
-})
+    // for (let i = 0; i < 20; i++) {
+    //     var showButton = $("<button>")
+    //     showButton.text("Show on Map")
+    //     eventItems.append(showButton)
+    //     eventItems.append("<br><hr>")
+    
 
 // function eventList
 
