@@ -34,7 +34,7 @@ function searchTicketMaster() {
     })
 
     // call the function to update event list based on the object 
-    
+
 
 }
 
@@ -85,15 +85,15 @@ function updateEvents(response) {
 
 
 
-    
-    
 
-    // for (let i = 0; i < 20; i++) {
-    //     var showButton = $("<button>")
-    //     showButton.text("Show on Map")
-    //     eventItems.append(showButton)
-    //     eventItems.append("<br><hr>")
-    
+
+
+// for (let i = 0; i < 20; i++) {
+//     var showButton = $("<button>")
+//     showButton.text("Show on Map")
+//     eventItems.append(showButton)
+//     eventItems.append("<br><hr>")
+
 
 // function eventList
 
@@ -130,17 +130,28 @@ function updateEvents(response) {
 // update map when city is searched 
 // update map when event is clicked 
 // update map if breweries are selected "yes, include" then populate map with pins of surrounding breweries
-// function googleMap() {
+// TODO: on page load, generate map to lat/lng of seattle
+// TODO: when search button is clicked, center map around the city search
+// TODO: when event/show breweries button is clicked, center map around the event location
+//  TODO: put marker on event location
+//  TODO: put markers on every nearby brewery
 
-    let map;
+let map;
+var geocoder;
+// location of Seattle, what first shows when user opens website
+var location1 = { lat: 47.6, lng: -122.3 };
+var myOptions = {
+    zoom: 8,
+    center: location1
+}
 
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: {
-                lat: -34.397,
-                lng: 150.644
-            },
-            zoom: 8,
-        });
-    }
-// }
+// loads map on screen
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+    // marker = new google.maps.Marker({
+    //     position: location1,
+    //     map: map,
+    //     title: "Click to zoom"
+    // })
+}
