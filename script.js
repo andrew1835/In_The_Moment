@@ -30,10 +30,11 @@ function searchTicketMaster() {
         method: "GET"
     }).then(function (response) {
         console.log(response);
+        updateEvents(response)
     })
 
     // call the function to update event list based on the object 
-    updateEvents()
+    
 
 }
 
@@ -48,7 +49,8 @@ function updateEvents(response) {
         showButton.text("Show on Map")
         eventItems.append(showButton)
         eventItems.append("<br><hr>")
-
+        var date = response._embedded.events[i].dates.start.dateTime
+        console.log(date)
 
 
     }
