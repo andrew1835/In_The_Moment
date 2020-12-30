@@ -19,6 +19,8 @@ $("#searchBtn").on("click", function () {
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
     // call the TicketMaster Ajax function
     searchTicketMaster()
+    placeOnMap(city)
+
 })
 
 function searchTicketMaster() {
@@ -137,9 +139,11 @@ function updateEvents(response) {
 //  TODO: put markers on every nearby brewery
 
 let map;
-var geocoder;
+// var geocoder = new google.maps.Geocoder();
 // location of Seattle, what first shows when user opens website
 var location1 = { lat: 47.6, lng: -122.3 };
+var location2 = { lat: -37, lng: 144.9 };
+
 var myOptions = {
     zoom: 8,
     center: location1
@@ -154,4 +158,21 @@ function initMap() {
     //     map: map,
     //     title: "Click to zoom"
     // })
+}
+
+// change center to whatever is passed
+function placeOnMap(city) {
+    var geocodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+Mountain+View,+CA&key=AIzaSyBg2nH-lD0SNjYImxE4rpX9G2YZ5lyrNy4`
+    $.ajax({
+        url: geocodeURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response);
+    })
+    // geocoder.geocode({'address': city}, function(results,status) {
+    //     if (status === "OK") {
+    //         myOptions.center = results[0].geometry.location
+    //     }
+    // })
+    //     myOptions.center = center;
 }
