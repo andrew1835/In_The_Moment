@@ -85,6 +85,19 @@ function updateEvents(response) {
     }
 }
 
+$(function () {
+    $(window).scroll(function () {
+        var winTop = $(window).scrollTop();
+        if (winTop >= 30) {
+            $("body").addClass("sticky-shrinknav-wrapper");
+        } else {
+            $("body").removeClass("sticky-shrinknav-wrapper");
+        }
+    });
+});
+
+
+
 // search the ticketmaster object based on the date
 
 // search the ticketmaster object based on type of event (based on the classification by ticketmaster)
