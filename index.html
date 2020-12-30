@@ -4,48 +4,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>In The Moment</title>
+    <!-- Compressed CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css"
+        integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-    <nav>
-        <button id="discoverBtn">Discover</button>
-        <button id="contactBtn">Contact</button>
-    </nav>
+    <div class="hero-section">
+        <div class="hero-section-text">
+            <h1>In The Moment</h1>
+            <h5>Discover Events and Nearby Breweries!</h5>
+        </div>
+    </div>
 
-    <main>
-        <h1>In The Moment</h1>
-        <h2>Discover Live Events and Breweries Nearby</h2>
+    <div class="row">
+        <div class="medium-12 columns">
+            <ul class="tabbed-search tabs" data-tabs id="tabbed-search">
 
-        <!-- map -->
-        <section id="map"></section>
-        <!-- searches -->
-        <section>
-            <label for="searchCity">Search City</label>
-            <input type="text" id="searchCity">
+                <li class="tabs-title is-active"><a href="#panel4" aria-selected="true">Discover Events</a></li>
+                <li class="tabs-title"><a href="./contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+    </div>
 
-            <label for="date">Date</label>
-            <input type="date" id="date">
 
-            <label for="typeOfEvent">Type of Event</label>
-            <select name="typeOfEvent" id="typeOfEvent">
-                <option value="music">Music</option>
-                <option value="arts">Arts</option>
-                <option value="sports">Sports</option>
-            </select>
+    <div class="tabbed-search-content tabs-content" data-tabs-content="tabbed-search">
+        <div class="tabs-panel is-active" id="panel1">
+            <form>
+                <div class="row">
+                    <div class="small-12 medium-2 columns">
+                        <label>
+                            <input type="text" placeholder="City" id="searchCity">
+                        </label>
+                    </div>
+                    <div class="small-12 medium-2 columns">
+                        <label>
+                            <input type="date" placeholder="Date" id="date">
+                        </label>
+                    </div>
 
-            <label for="includeBreweries">Include Breweries in Search</label>
-            <input type="checkbox" id="includeBreweries" value="breweries">
+                    <div class="small-12 medium-2 columns" id="typeOfEvent">
+                        <label>
+                            <select>
+                                <option value="one">Music</option>
+                                <option value="two">Arts</option>
+                                <option value="three">Sports</option>
+                            </select>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="small-12 medium-2 columns">
+                        <label for="includeBreweries">Include Breweries in Search</label>
+                        <input type="checkbox" id="includeBreweries" value="breweries">
 
-            <button id="searchBtn">Search</button>
-        </section>
-        <!-- event recommendations -->
-        <section id="eventRecommendations"></section>
+                    </div>
+                    <div class="small-12 medium-2 columns">
+                        <button type="button" class="primary button expanded search-button" id="searchBtn"><i
+                                class="fa fa-search"></i>Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        <footer></footer>
+    <!-- map -->
+    <section id="map"></section>
+    <!-- searches -->
+    <section>
+        <!-- <label for="searchCity">Search City</label>
+        <input type="text" id="searchCity"> -->
+        <!-- 
+        <label for="date">Date</label>
+        <input type="date" id="date"> -->
+
+        <!-- <label for="typeOfEvent">Type of Event</label>
+        <select name="typeOfEvent" id="typeOfEvent">
+            <option value="music">Music</option>
+            <option value="arts">Arts</option>
+            <option value="sports">Sports</option>
+        </select> -->
+
+        <!-- <label for="includeBreweries">Include Breweries in Search</label>
+        <input type="checkbox" id="includeBreweries" value="breweries">
+
+        <button id="searchBtn">Search</button> -->
+    </section>
+    <!-- event recommendations -->
+    <section id="eventRecommendations"></section>
+
+    <footer></footer>
     </main>
 
 
@@ -71,8 +122,11 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"
+        integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+
     <script src="script.js"></script>
-    
+
 </body>
 
 </html>

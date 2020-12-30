@@ -34,7 +34,7 @@ function searchTicketMaster() {
     })
 
     // call the function to update event list based on the object 
-    
+
 
 }
 
@@ -55,6 +55,19 @@ function updateEvents(response) {
 
     }
 }
+
+$(function () {
+    $(window).scroll(function () {
+        var winTop = $(window).scrollTop();
+        if (winTop >= 30) {
+            $("body").addClass("sticky-shrinknav-wrapper");
+        } else {
+            $("body").removeClass("sticky-shrinknav-wrapper");
+        }
+    });
+});
+
+
 
 // search the ticketmaster object based on the date
 
@@ -85,15 +98,15 @@ function updateEvents(response) {
 
 
 
-    
-    
 
-    // for (let i = 0; i < 20; i++) {
-    //     var showButton = $("<button>")
-    //     showButton.text("Show on Map")
-    //     eventItems.append(showButton)
-    //     eventItems.append("<br><hr>")
-    
+
+
+// for (let i = 0; i < 20; i++) {
+//     var showButton = $("<button>")
+//     showButton.text("Show on Map")
+//     eventItems.append(showButton)
+//     eventItems.append("<br><hr>")
+
 
 // function eventList
 
