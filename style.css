@@ -143,3 +143,12 @@
 .tabs-title>a {
     padding: 1em 1.25em;
 }
+
+#map {
+    height: 100%;
+}
+
+#mapArea {
+    height: 50vh;
+    width: 30vw;
+}
