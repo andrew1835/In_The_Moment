@@ -42,21 +42,63 @@ function searchTicketMaster() {
 
 
 var eventItems = $(".eventList")
-var eventText = "Event filler"
+
+
 
 function updateEvents(response) {
 
     for (let i = 0; i < 20; i++) {
+        // var image
+        // TODO: Within this for loop, create a link with jQuery (create an a href), then set the href equal to the URL, and finally append it to the div
+
+        // creates the tag. Right now it shows object Object (like the button used to do). Figure out why that is, and figure out what you changed with button to make it an actual button
+
+        var link = $("<a></a>")
+        link.text("Link to Event")
+        link.attr("href" , response._embedded.events[i].url)
+        link.attr("target" , "_blank")
+
+        //     href: "",
+        //     text: "Link to Event",
+        // }) 
+        // link.text("Link to Event")
+
+        // Now set the attribute for href to be equal to the URL at the given index of events (events[i]). It should be easy to find an example Activity where they set the attributes of a tag using jQuery
+
+        // link.attr("href" , response._embedded.events[i].url)
+
+        // Then append eventItems with link, and you can then delete the below code you have which puts the actual URL in there
+
+
+        var eventName = response._embedded.events[i].name
+        var date = response._embedded.events[i].dates.start.dateTime
+        // var eventLink = response._embedded.events[i].url
         var showButton = $("<button>")
         showButton.text("Show on Map")
+        eventItems.append(eventName + " ")
+        eventItems.append(date + " ")
+        eventItems.append(link)
+        eventItems.append(" ")
         eventItems.append(showButton)
         eventItems.append("<br><hr>")
-        var date = response._embedded.events[i].dates.start.dateTime
-        console.log(date)
+        
 
 
     }
 }
+
+$(function () {
+    $(window).scroll(function () {
+        var winTop = $(window).scrollTop();
+        if (winTop >= 30) {
+            $("body").addClass("sticky-shrinknav-wrapper");
+        } else {
+            $("body").removeClass("sticky-shrinknav-wrapper");
+        }
+    });
+});
+
+
 
 // search the ticketmaster object based on the date
 
@@ -80,8 +122,11 @@ function updateEvents(response) {
 
 // TODO: Create 20 breaks, lines, and buttons each time 
 // TODO: Fill in the div with the relevant information for the event
+// TODO: Make sure that the information that shows up changes based on the search filters 
 // TODO: Make the button functional (it should populate the map with pins relavent to the specific event the button is associated with)
 // TODO: Format the above items
+// TODO: Make sure that the events are the same as the events that acutally appear on Ticketmaster (right now they aren't)
+
 
 // You are pretty much done once you understand the NYT article. All you have to do after that is call out the correct data, print it in the div, and format it correctly 
 
