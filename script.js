@@ -5,6 +5,9 @@ var citiesInLocalStorage = localStorage.getItem("cities")
 
 if (citiesInLocalStorage) {
     citiesSearched = JSON.parse(citiesInLocalStorage)
+    city = citiesSearched[citiesSearched.length - 1]
+    console.log(city)
+    searchTicketMaster(city)
     // find a way to display the city data (dropdown or autopopulate)
 }
 
@@ -18,6 +21,8 @@ $("#searchBtn").on("click", function () {
     citiesSearched.push(city)
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
     // call the TicketMaster Ajax function
+    $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
+    console.log(citiesSearched)
     searchTicketMaster()
     geocodeAddress(city, geocoder, map)
 

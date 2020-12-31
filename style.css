@@ -1,3 +1,7 @@
+body {
+    background: #686661;
+}
+
 .hero-section {
     background: url("https://static.billboard.com/files/media/music-crowd-concert-stock-2018-u-billboard-1548-compressed.jpg") 50% no-repeat;
     background-size: cover;
@@ -144,11 +148,28 @@
     padding: 1em 1.25em;
 }
 
+.eventList {
+    float: left;
+}
+
 #map {
     height: 100%;
 }
 
 #mapArea {
-    height: 50vh;
-    width: 30vw;
+    float: left;
+    height: 40vh;
+    width: 31vw;
+    margin-left: 2%;
+    border: 2px solid #7a7469;
+
+}
+
+.eventList {
+    float: left;
+    border: 1px solid #7a7469;
+    color: #fefefe;
+    text-shadow: 1px 1px 2px #0a0a0a;
+    margin-left: 2%;
+    padding: 15px
 }
