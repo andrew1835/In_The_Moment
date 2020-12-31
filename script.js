@@ -5,6 +5,9 @@ var citiesInLocalStorage = localStorage.getItem("cities")
 
 if (citiesInLocalStorage) {
     citiesSearched = JSON.parse(citiesInLocalStorage)
+    city = citiesSearched[citiesSearched.length - 1]
+    console.log(city)
+    searchTicketMaster(city)
     // find a way to display the city data (dropdown or autopopulate)
 }
 
@@ -18,6 +21,8 @@ $("#searchBtn").on("click", function () {
     citiesSearched.push(city)
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
     // call the TicketMaster Ajax function
+    $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
+    console.log(citiesSearched)
     searchTicketMaster()
 })
 
@@ -53,8 +58,8 @@ function updateEvents(response) {
 
         var link = $("<a></a>")
         link.text("Link to Event")
-        link.attr("href" , response._embedded.events[i].url)
-        link.attr("target" , "_blank")
+        link.attr("href", response._embedded.events[i].url)
+        link.attr("target", "_blank")
 
         //     href: "",
         //     text: "Link to Event",
@@ -79,7 +84,7 @@ function updateEvents(response) {
         eventItems.append(" ")
         eventItems.append(showButton)
         eventItems.append("<br><hr>")
-        
+
 
 
     }
@@ -184,7 +189,10 @@ $(function () {
 let map;
 var geocoder;
 // location of Seattle, what first shows when user opens website
-var location1 = { lat: 47.6, lng: -122.3 };
+var location1 = {
+    lat: 47.6,
+    lng: -122.3
+};
 var myOptions = {
     zoom: 8,
     center: location1
