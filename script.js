@@ -19,7 +19,7 @@ $("#searchBtn").on("click", function () {
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
     // call the TicketMaster Ajax function
     searchTicketMaster()
-    placeOnMap(city)
+    geocodeAddress(city, geocoder, map)
 
 })
 
@@ -55,8 +55,8 @@ function updateEvents(response) {
 
         var link = $("<a></a>")
         link.text("Link to Event")
-        link.attr("href" , response._embedded.events[i].url)
-        link.attr("target" , "_blank")
+        link.attr("href", response._embedded.events[i].url)
+        link.attr("target", "_blank")
 
         //     href: "",
         //     text: "Link to Event",
@@ -81,7 +81,7 @@ function updateEvents(response) {
         eventItems.append(" ")
         eventItems.append(showButton)
         eventItems.append("<br><hr>")
-        
+
 
 
     }
@@ -184,11 +184,10 @@ $(function () {
 //  TODO: put markers on every nearby brewery
 
 let map;
-// var geocoder = new google.maps.Geocoder();
 // location of Seattle, what first shows when user opens website
 var location1 = { lat: 47.6, lng: -122.3 };
 var location2 = { lat: -37, lng: 144.9 };
-
+var geocoder;
 var myOptions = {
     zoom: 8,
     center: location1
@@ -197,6 +196,7 @@ var myOptions = {
 // loads map on screen
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), myOptions);
+    geocoder = new google.maps.Geocoder();
 
     // marker = new google.maps.Marker({
     //     position: location1,
@@ -206,18 +206,16 @@ function initMap() {
 }
 
 // change center to whatever is passed
-function placeOnMap(city) {
-    var geocodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+Mountain+View,+CA&key=AIzaSyBg2nH-lD0SNjYImxE4rpX9G2YZ5lyrNy4`
-    $.ajax({
-        url: geocodeURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
+function geocodeAddress(city, geocoder, resultsMap) {
+console.log(city)
+    geocoder.geocode({ 'address': city }, function (results, status) {
+        if (status === "OK") {
+            console.log(results)
+            map.setCenter(results[0].geometry.location)
+            var marker = new google.maps.Marker({
+                map: resultsMap,
+                position: results[0].geometry.location
+            })
+        }
     })
-    // geocoder.geocode({'address': city}, function(results,status) {
-    //     if (status === "OK") {
-    //         myOptions.center = results[0].geometry.location
-    //     }
-    // })
-    //     myOptions.center = center;
 }
