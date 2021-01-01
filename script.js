@@ -24,8 +24,11 @@ $("#searchBtn").on("click", function () {
     $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
     console.log(citiesSearched)
     searchTicketMaster()
+    placeCity(city)
+
 })
 
+var eventArray;
 function searchTicketMaster() {
     // run the query based on the new city
     var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&apikey=JFMQRTKJnY1nEhUvR9DPsBdCSiWWrKBv`;
@@ -36,6 +39,8 @@ function searchTicketMaster() {
     }).then(function (response) {
         console.log(response);
         updateEvents(response)
+
+        eventArray = response;
     })
 
     // call the function to update event list based on the object 
@@ -78,6 +83,8 @@ function updateEvents(response) {
         // var eventLink = response._embedded.events[i].url
         var showButton = $("<button>")
         showButton.text("Show on Map")
+        showButton.addClass("showBtn")
+        showButton.attr("value", i)
         eventItems.append(eventName + " ")
         eventItems.append(date + " ")
         eventItems.append(link)
@@ -180,31 +187,95 @@ $(function () {
 // update map when city is searched 
 // update map when event is clicked 
 // update map if breweries are selected "yes, include" then populate map with pins of surrounding breweries
-// TODO: on page load, generate map to lat/lng of seattle
-// TODO: when search button is clicked, center map around the city search
-// TODO: when event/show breweries button is clicked, center map around the event location
-//  TODO: put marker on event location
-//  TODO: put markers on every nearby brewery
 
 let map;
-var geocoder;
 // location of Seattle, what first shows when user opens website
-var location1 = {
-    lat: 47.6,
-    lng: -122.3
-};
+var location1 = { lat: 47.6, lng: -122.3 };
+var location2 = { lat: -37, lng: 144.9 };
+var geocoder;
 var myOptions = {
     zoom: 8,
     center: location1
-}
+};
 
+// on page load, generate map to lat/lng of seattle
 // loads map on screen
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), myOptions);
+    geocoder = new google.maps.Geocoder();
 
-    // marker = new google.maps.Marker({
-    //     position: location1,
-    //     map: map,
-    //     title: "Click to zoom"
-    // })
+}
+
+// when search button is clicked, center map around the city search
+// change center to whatever is passed
+
+function placeCity(city) {
+    // deletes markers from previous searches
+    deleteMarkers();
+    // returns lat and long of city name
+    geocoder.geocode({ 'address': city }, function (results, status) {
+        if (status === "OK") {
+            // centers map around that coordinate
+            map.setCenter(results[0].geometry.location)
+            // adds marker to that coordinate
+            addMarker(results[0].geometry.location)
+        }
+    })
+}
+
+
+// when event/show breweries button is clicked, center map around the event location
+//  put marker on event location
+$("#eventList").delegate(".showBtn", "click", function () {
+    deleteMarkers();
+    var value = $(this).attr("value");
+    var address = eventArray._embedded.events[value]._embedded.venues[0].name;
+    placeCity(address)
+    $.ajax({
+        url: `https://api.openbrewerydb.org/breweries?by_city=${eventArray._embedded.events[value]._embedded.venues[0].city.name}`,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response)
+        //  put markers on every nearby brewery
+        for (var i = 0; i < response.length; i++) {
+            geocoder.geocode({ 'address': response[i].street + response[i].city }, function (results, status) {
+                if (status === "OK") {
+                    // adds marker to that coordinate
+                    addBreweryMarker(results[0].geometry.location)
+                }
+            })
+        }
+    })
+})
+
+
+var markers = [];
+
+function addMarker(location) {
+    const marker = new google.maps.Marker({
+        position: location,
+        map: map,
+    })
+    markers.push(marker)
+}
+function addBreweryMarker(location) {
+    const marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }
+    })
+    markers.push(marker)
+}
+
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+function deleteMarkers() {
+    setMapOnAll(null);
+    markers = [];
 }
