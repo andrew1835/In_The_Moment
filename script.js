@@ -13,8 +13,15 @@ if (citiesInLocalStorage) {
 }
 
 // onclick event to run the event search query when the user clicks the search button
-$("#searchBtn").on("click", function () {
+$("#target").submit(function (event) {
+    event.preventDefault();
     city = $("#searchCity").val()
+    console.log(city)
+    var dateSelected = $("#date").val()
+    console.log(dateSelected)
+    // showLocalBreweries = $("#includeBreweries").val()
+    // console.log(showLocalBreweries)
+
     // add the new city to the local storage
     citiesSearched.push(city)
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
@@ -23,15 +30,28 @@ $("#searchBtn").on("click", function () {
     $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
 
     // call the TicketMaster Ajax function
-    searchTicketMaster(city)
+    searchTicketMaster(city, dateSelected)
+    placeCity(city)
 
 })
 
 
 // search for events based on the city searched
-function searchTicketMaster(city) {
+function searchTicketMaster(city, startDate) {
+    var apiKey = "JFMQRTKJnY1nEhUvR9DPsBdCSiWWrKBv";
+
+    var formattedDate = ""
+
+    if (startDate) {
+        formattedDate = new Date(startDate).toISOString().split('.')[0] + "Z";
+    } else {
+        formattedDate = new Date().toISOString().split('.')[0] + "Z"; // today
+    }
+    console.log(formattedDate)
+
+    // var formattedDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString();
     // run the query based on the new city
-    var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&apikey=JFMQRTKJnY1nEhUvR9DPsBdCSiWWrKBv`;
+    var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&startDateTime=${formattedDate}&sort=date,asc&apikey=${apiKey}`;
 
     $.ajax({
         url: queryURL,
@@ -85,57 +105,53 @@ function updateEvents(response) {
         showButton.attr("value", i)
 
         // append all items to page
-        eventBucket.append(wrapperDiv)
-        eventBucket.append(nameDiv)
-        eventBucket.append(dateDiv)
+        wrapperDiv.append(nameDiv)
+        wrapperDiv.append(dateDiv)
 
         wrapperDiv.append(link)
         wrapperDiv.append(" ")
         wrapperDiv.append(showButton)
         wrapperDiv.append("<br><hr>")
 
+        eventBucket.append(wrapperDiv)
+
         // save the first event's longitutde and latitude to local storage to use later as the default location on page load
         if (i === 0) {
-
             // get location for later
             var location = currentEvent["_embedded"]["venues"][0]["location"];
             localStorage.setItem("lastLocationCoordinates", JSON.stringify(location))
-
         }
-
     }
 
 }
 
+// default location if nothing in local storage
+let map;
+
+var defaultLocation = {
+    lat: 47.6,
+    lng: -122.3
+};
+
+var geocoder;
+var googleMapsOptions = {
+    zoom: 8,
+    center: defaultLocation
+}
 
 
 var lastLocationCoordinates = localStorage.getItem("lastLocationCoordinates")
 
 if (lastLocationCoordinates) {
-    // console.log(typeof lastLocationCoordinates)
+
     lastLocationCoordinates = JSON.parse(lastLocationCoordinates)
-    // console.log(typeof lastLocationCoordinates)
-    // location of Seattle, what first shows when user opens website
+
     var defaultLocation = {
         lat: parseInt(lastLocationCoordinates.latitude),
         lng: parseInt(lastLocationCoordinates.longitude)
     };
 
     googleMapsOptions = {
-        zoom: 8,
-        center: defaultLocation
-    }
-} else {
-    // default location if nothing in local storage
-    let map;
-
-    var defaultLocation = {
-        lat: 47.6,
-        lng: -122.3
-    };
-
-    var geocoder;
-    var googleMapsOptions = {
         zoom: 8,
         center: defaultLocation
     }
@@ -170,29 +186,36 @@ function placeCity(city) {
 
 // when event/show breweries button is clicked, center map around the event location
 //  put marker on event location
+
+
 $("#eventList").delegate(".button-rounded-hover", "click", function () {
     deleteMarkers();
     var value = $(this).attr("value");
     var address = eventArray._embedded.events[value]._embedded.venues[0].name;
     placeCity(address)
-    $.ajax({
-        url: `https://api.openbrewerydb.org/breweries?by_city=${eventArray._embedded.events[value]._embedded.venues[0].city.name}`,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response)
-        //  put markers on every nearby brewery
-        for (var i = 0; i < response.length; i++) {
-            geocoder.geocode({
-                'address': response[i].street + response[i].city
-            }, function (results, status) {
-                if (status === "OK") {
-                    // adds marker to that coordinate
-                    addBreweryMarker(results[0].geometry.location)
-                }
-            })
-        }
-    })
+
+    if ($("#includeBreweries").is(":checked")) {
+
+        $.ajax({
+            url: `https://api.openbrewerydb.org/breweries?by_city=${eventArray._embedded.events[value]._embedded.venues[0].city.name}`,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response)
+            //  put markers on every nearby brewery
+            for (var i = 0; i < response.length; i++) {
+                geocoder.geocode({
+                    'address': response[i].street + response[i].city
+                }, function (results, status) {
+                    if (status === "OK") {
+                        // adds marker to that coordinate
+                        addBreweryMarker(results[0].geometry.location)
+                    }
+                })
+            }
+        })
+    }
 })
+
 
 
 var markers = [];

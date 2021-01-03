@@ -16,7 +16,7 @@
     <div class="hero-section">
         <div class="hero-section-text">
             <h1>In The Moment</h1>
-            <h5>Discover Events and Nearby Breweries!</h5>
+            <h3>Discover Events and Nearby Breweries</h3>
         </div>
     </div>
     <!-- nav bar -->
@@ -34,7 +34,7 @@
     <div class="tabbed-search-content tabs-content" data-tabs-content="tabbed-search">
         <div class="tabs-panel is-active" id="panel1">
             <!-- search form to enter user's search criteria -->
-            <form>
+            <form id="target">
                 <div class="row">
                     <div class="small-12 medium-2 columns">
                         <label>
@@ -47,7 +47,7 @@
                         </label>
                     </div>
 
-                    <div class="small-12 medium-2 columns" id="typeOfEvent">
+                    <!-- <div class="small-12 medium-2 columns" id="typeOfEvent">
                         <label>
                             <select>
                                 <option value="one">Music</option>
@@ -55,12 +55,13 @@
                                 <option value="three">Sports</option>
                             </select>
                         </label>
-                    </div>
+                    </div> -->
                     <br>
                     <div class="small-12 medium-2 columns">
-                        <label for="includeBreweries">Include Breweries in Search</label>
-                        <input type="checkbox" id="includeBreweries" value="breweries">
-
+                        <div>
+                            <label for="includeBreweries">Include Breweries in Search</label>
+                            <input type="checkbox" id="includeBreweries" value="breweries-true">
+                        </div>
                     </div>
                     <div class="small-12 medium-2 columns">
                         <button type="button" class="primary button expanded search-button" id="searchBtn"><i
