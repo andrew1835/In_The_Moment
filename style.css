@@ -5,7 +5,7 @@ body {
 .hero-section {
     background: url("https://static.billboard.com/files/media/music-crowd-concert-stock-2018-u-billboard-1548-compressed.jpg") 50% no-repeat;
     background-size: cover;
-    height: 40vh;
+    height: 35vh;
     text-align: center;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -16,11 +16,14 @@ body {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
+    opacity: 0.6;
 }
 
 .hero-section .hero-section-text {
     color: #fefefe;
-    text-shadow: 1px 1px 2px #0a0a0a;
+    text-shadow: 2px 2px 2px #0a0a0a;
+    padding-bottom: 10%;
+    letter-spacing: 1.5px;
 }
 
 
@@ -150,7 +153,9 @@ body {
 
 .eventList {
     float: left;
+    width: 60%;
 }
+
 
 #map {
     height: 100%;
@@ -158,10 +163,10 @@ body {
 
 #mapArea {
     float: left;
-    height: 40vh;
+    height: 80vh;
     width: 31vw;
     margin-left: 2%;
-    border: 2px solid #7a7469;
+    border: 5px solid #dbdad6;
 
 }
 
@@ -172,4 +177,73 @@ body {
     text-shadow: 1px 1px 2px #0a0a0a;
     margin-left: 2%;
     padding: 15px
+}
+
+.eventList a {
+    color: #0df3dd
+}
+
+#eventsListTitle {
+    float: left;
+    /* border: 1px solid #7a7469; */
+    color: #fefefe;
+    text-shadow: 1px 1px 2px #0a0a0a;
+    margin-left: 2%;
+    padding: 15px
+}
+
+
+.button-rounded-hover {
+    border: 0;
+    border-radius: 5000px;
+    padding: 0.5rem 1rem;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.5 rem;
+    letter-spacing: 1px;
+    transition: all 0.35s ease;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    float: right;
+}
+
+.button-rounded-hover:before {
+    opacity: 0;
+    content: "";
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: inherit;
+    background-color: #fefefe;
+    transition: all 0.3s;
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+.button-rounded-hover:after {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    border: 2px solid #115b8d;
+    content: '';
+    border-radius: inherit;
+}
+
+.button-rounded-hover:hover,
+.button-rounded-hover:focus {
+    background-color: #115b8d;
+}
+
+.button-rounded-hover:hover:before,
+.button-rounded-hover:focus:before {
+    -webkit-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
+    opacity: 0.25;
 }

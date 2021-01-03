@@ -1,35 +1,35 @@
 var citiesSearched = []
 var city = ""
-// import the string of cities in local storage
+var eventArray;
 var citiesInLocalStorage = localStorage.getItem("cities")
+var lastLocationCoordinates = localStorage.getItem("lastLocationCoordinates")
 
+// import the string of cities in local storage
 if (citiesInLocalStorage) {
     citiesSearched = JSON.parse(citiesInLocalStorage)
     city = citiesSearched[citiesSearched.length - 1]
-    console.log(city)
     searchTicketMaster(city)
-    // find a way to display the city data (dropdown or autopopulate)
+    $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
 }
 
 // onclick event to run the event search query when the user clicks the search button
-
-
 $("#searchBtn").on("click", function () {
-
     city = $("#searchCity").val()
     // add the new city to the local storage
     citiesSearched.push(city)
     localStorage.setItem("cities", JSON.stringify(citiesSearched))
-    // call the TicketMaster Ajax function
+
+    // update the title page display to show the city 
     $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
-    console.log(citiesSearched)
-    searchTicketMaster()
-    placeCity(city)
+
+    // call the TicketMaster Ajax function
+    searchTicketMaster(city)
 
 })
 
-var eventArray;
-function searchTicketMaster() {
+
+// search for events based on the city searched
+function searchTicketMaster(city) {
     // run the query based on the new city
     var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&apikey=JFMQRTKJnY1nEhUvR9DPsBdCSiWWrKBv`;
 
@@ -38,172 +38,114 @@ function searchTicketMaster() {
         method: "GET"
     }).then(function (response) {
         console.log(response);
+        clearPreviousSearches()
         updateEvents(response)
 
         eventArray = response;
     })
-
-    // call the function to update event list based on the object 
-
-
 }
 
+function clearPreviousSearches() {
+    $(".eventList").empty();
+}
 
-var eventItems = $(".eventList")
+// grab the event list class from the html
+var eventBucket = $(".eventList")
 
-
-
+// update the page with event list data from the ticketmaster API
 function updateEvents(response) {
 
     for (let i = 0; i < 20; i++) {
-        // var image
-        // TODO: Within this for loop, create a link with jQuery (create an a href), then set the href equal to the URL, and finally append it to the div
+        var currentEvent = response._embedded.events[i];
+        var url = currentEvent.url;
+        var eventName = currentEvent.name;
+        var rawDate = currentEvent.dates.start.dateTime;
+        var formattedDate = new Date(rawDate).toDateString();
 
-        // creates the tag. Right now it shows object Object (like the button used to do). Figure out why that is, and figure out what you changed with button to make it an actual button
+        // event div
+        var wrapperDiv = $("<div>")
 
+        // create link 
         var link = $("<a></a>")
         link.text("Link to Event")
-        link.attr("href", response._embedded.events[i].url)
+        link.attr("href", url)
         link.attr("target", "_blank")
 
-        //     href: "",
-        //     text: "Link to Event",
-        // }) 
-        // link.text("Link to Event")
+        // create event name and date
+        var nameDiv = $("<div>")
+        nameDiv.append(eventName)
 
-        // Now set the attribute for href to be equal to the URL at the given index of events (events[i]). It should be easy to find an example Activity where they set the attributes of a tag using jQuery
+        var dateDiv = $("<div>")
+        dateDiv.append(formattedDate)
 
-        // link.attr("href" , response._embedded.events[i].url)
-
-        // Then append eventItems with link, and you can then delete the below code you have which puts the actual URL in there
-
-
-        var eventName = response._embedded.events[i].name
-        var date = response._embedded.events[i].dates.start.dateTime
-        // var eventLink = response._embedded.events[i].url
+        // create button 
         var showButton = $("<button>")
         showButton.text("Show on Map")
-        showButton.addClass("showBtn")
+        showButton.addClass("button button-rounded-hover")
         showButton.attr("value", i)
-        eventItems.append(eventName + " ")
-        eventItems.append(date + " ")
-        eventItems.append(link)
-        eventItems.append(" ")
-        eventItems.append(showButton)
-        eventItems.append("<br><hr>")
 
+        // append all items to page
+        eventBucket.append(wrapperDiv)
+        eventBucket.append(nameDiv)
+        eventBucket.append(dateDiv)
 
+        wrapperDiv.append(link)
+        wrapperDiv.append(" ")
+        wrapperDiv.append(showButton)
+        wrapperDiv.append("<br><hr>")
+
+        // save the first event's longitutde and latitude to local storage to use later as the default location on page load
+        if (i === 0) {
+
+            // get location for later
+            var location = currentEvent["_embedded"]["venues"][0]["location"];
+            localStorage.setItem("lastLocationCoordinates", JSON.stringify(location))
+
+        }
 
     }
+
 }
 
-$(function () {
-    $(window).scroll(function () {
-        var winTop = $(window).scrollTop();
-        if (winTop >= 30) {
-            $("body").addClass("sticky-shrinknav-wrapper");
-        } else {
-            $("body").removeClass("sticky-shrinknav-wrapper");
-        }
-    });
-});
 
 
+var lastLocationCoordinates = localStorage.getItem("lastLocationCoordinates")
 
-// search the ticketmaster object based on the date
+if (lastLocationCoordinates) {
+    // console.log(typeof lastLocationCoordinates)
+    lastLocationCoordinates = JSON.parse(lastLocationCoordinates)
+    // console.log(typeof lastLocationCoordinates)
+    // location of Seattle, what first shows when user opens website
+    var defaultLocation = {
+        lat: parseInt(lastLocationCoordinates.latitude),
+        lng: parseInt(lastLocationCoordinates.longitude)
+    };
 
-// search the ticketmaster object based on type of event (based on the classification by ticketmaster)
+    googleMapsOptions = {
+        zoom: 8,
+        center: defaultLocation
+    }
+} else {
+    // default location if nothing in local storage
+    let map;
 
-// if they check "recommend breweries" then include the ajax / api search for breweries near the selected event location 
+    var defaultLocation = {
+        lat: 47.6,
+        lng: -122.3
+    };
 
-// update the google map view to zoom in on the selected city the user searches 
-
-// push the city search to the citiesSearched array and save to local storage
-
-// function eventList - generate the list of events
-
-
-
-
-
-
-
-// Andrew on the event list 
-
-// TODO: Create 20 breaks, lines, and buttons each time 
-// TODO: Fill in the div with the relevant information for the event
-// TODO: Make sure that the information that shows up changes based on the search filters 
-// TODO: Make the button functional (it should populate the map with pins relavent to the specific event the button is associated with)
-// TODO: Format the above items
-// TODO: Make sure that the events are the same as the events that acutally appear on Ticketmaster (right now they aren't)
-
-
-// You are pretty much done once you understand the NYT article. All you have to do after that is call out the correct data, print it in the div, and format it correctly 
-
-
-
-
-
-
-// for (let i = 0; i < 20; i++) {
-//     var showButton = $("<button>")
-//     showButton.text("Show on Map")
-//     eventItems.append(showButton)
-//     eventItems.append("<br><hr>")
-
-
-// function eventList
-
-// for (var i =0; i<20; i++) {
-
-// create a new row for the event 
-
-// display high level detail of event 
-
-// add a button for that event
-
-// on click event 
-
-// update google map to show location of the selected event 
-
-// if they selected yes, they would like brewery recommendations then show the breweries on the map that are near the location of the event
-
-// TODO: questions to ask: 1. Am I supposed to do the Google map stuff above, or is that Beth? 2. We need to make the search button reloads/changes the page (so that someone can enter in a different city and get a fresh page of results). Activity 13 of the APIs could be helpful here. 3. What CSS framework are we using? 
-
-// $.ajax({
-//     url: "https://api.openbrewerydb.org/breweries?by_city=sultan",
-//     method: "GET"
-// }).then(function (response) {
-//     console.log(response)
-// })
-
-// update the web page to display the new event row / button(s)
-
-// }
-
-
-// Beth on the Maps
-
-// update map when city is searched 
-// update map when event is clicked 
-// update map if breweries are selected "yes, include" then populate map with pins of surrounding breweries
-
-let map;
-// location of Seattle, what first shows when user opens website
-var location1 = { lat: 47.6, lng: -122.3 };
-var location2 = { lat: -37, lng: 144.9 };
-var geocoder;
-var myOptions = {
-    zoom: 8,
-    center: location1
+    var geocoder;
+    var googleMapsOptions = {
+        zoom: 8,
+        center: defaultLocation
+    }
 };
 
-// on page load, generate map to lat/lng of seattle
-// loads map on screen
-function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), myOptions);
-    geocoder = new google.maps.Geocoder();
 
+// load map on screen
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), googleMapsOptions);
+    geocoder = new google.maps.Geocoder();
 }
 
 // when search button is clicked, center map around the city search
@@ -213,7 +155,9 @@ function placeCity(city) {
     // deletes markers from previous searches
     deleteMarkers();
     // returns lat and long of city name
-    geocoder.geocode({ 'address': city }, function (results, status) {
+    geocoder.geocode({
+        'address': city
+    }, function (results, status) {
         if (status === "OK") {
             // centers map around that coordinate
             map.setCenter(results[0].geometry.location)
@@ -226,7 +170,7 @@ function placeCity(city) {
 
 // when event/show breweries button is clicked, center map around the event location
 //  put marker on event location
-$("#eventList").delegate(".showBtn", "click", function () {
+$("#eventList").delegate(".button-rounded-hover", "click", function () {
     deleteMarkers();
     var value = $(this).attr("value");
     var address = eventArray._embedded.events[value]._embedded.venues[0].name;
@@ -238,7 +182,9 @@ $("#eventList").delegate(".showBtn", "click", function () {
         console.log(response)
         //  put markers on every nearby brewery
         for (var i = 0; i < response.length; i++) {
-            geocoder.geocode({ 'address': response[i].street + response[i].city }, function (results, status) {
+            geocoder.geocode({
+                'address': response[i].street + response[i].city
+            }, function (results, status) {
                 if (status === "OK") {
                     // adds marker to that coordinate
                     addBreweryMarker(results[0].geometry.location)
@@ -258,6 +204,7 @@ function addMarker(location) {
     })
     markers.push(marker)
 }
+
 function addBreweryMarker(location) {
     const marker = new google.maps.Marker({
         position: location,
