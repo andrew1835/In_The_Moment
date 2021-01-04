@@ -2,8 +2,6 @@ body {
     background: #686661;
 }
 
-
-
 .hero-section {
     background: url("https://static.billboard.com/files/media/music-crowd-concert-stock-2018-u-billboard-1548-compressed.jpg") 50% no-repeat;
     background-size: cover;
@@ -18,14 +16,13 @@ body {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    opacity: 0.6;
 }
 
 .hero-section .hero-section-text {
-    color: #f8eee7;
-    text-shadow: 2px 2px 2px #0a0a0a;
-    padding-bottom: 10%;
-    letter-spacing: 1.5px;
+    color: #fff;
+    text-shadow: 4px 4px 8px #0a0a0a;
+    padding-bottom: 8%;
+    letter-spacing: 2px;
 }
 
 h1 {
@@ -162,15 +159,6 @@ h1 {
     width: 60%;
 }
 
-/* #panel1 {
-    display: flex;
-}
-
-#panel1>div {
-    margin-left: 2%;
-} */
-
-
 #map {
     height: 100%;
 }
@@ -195,17 +183,23 @@ h1 {
     padding: 15px;
 }
 
+.eventNameTitle {
+    font-size: 16pt;
+
+}
+
 .eventList a {
-    color: #0df3dd
+    color: #ff7b37;
+
 }
 
 .eventItem {
     padding: 5px;
+    background: #868480;
 }
 
 #eventsListTitle {
     float: left;
-    /* border: 1px solid #7a7469; */
     color: #fefefe;
     text-shadow: 1px 1px 2px #0a0a0a;
     margin-left: 2%;
@@ -268,6 +262,11 @@ h1 {
     opacity: 0.25;
 }
 
-.float-left {
+.eventImage {
     float: left;
+    border: 5px solid #7a7469;
+    border-radius: 3px;
+    margin-bottom: 2%;
+    margin-right: 2%;
+
 }
