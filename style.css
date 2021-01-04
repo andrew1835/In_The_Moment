@@ -198,12 +198,13 @@ h1 {
     background: #868480;
 }
 
-#eventsListTitle {
-    float: left;
+#eventsListTitle,
+#eventsListDate {
+    display: flex;
     color: #fefefe;
     text-shadow: 1px 1px 2px #0a0a0a;
     margin-left: 2%;
-    padding: 15px
+    padding: 1px
 }
 
 
@@ -268,5 +269,13 @@ h1 {
     border-radius: 3px;
     margin-bottom: 2%;
     margin-right: 2%;
+
+}
+
+#notice {
+    text-align: center;
+    color: red;
+    font-style: italic;
+    font-size: 16pt;
 
 }

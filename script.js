@@ -12,7 +12,9 @@ if (citiesInLocalStorage) {
     $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
 }
 
+
 // onclick event to run the event search query when the user clicks the search button
+
 $("#target").submit(function (event) {
     event.preventDefault();
     searchEngine();
@@ -26,23 +28,33 @@ $("#searchBtn").on("click", function () {
 
 function searchEngine() {
     city = $("#searchCity").val()
-    console.log(city)
     var dateSelected = $("#date").val()
-    console.log(dateSelected)
-    // showLocalBreweries = $("#includeBreweries").val()
-    // console.log(showLocalBreweries)
 
     // add the new city to the local storage
-    citiesSearched.push(city)
-    localStorage.setItem("cities", JSON.stringify(citiesSearched))
+    if (city) {
+        citiesSearched.push(city)
+        localStorage.setItem("cities", JSON.stringify(citiesSearched))
+        // update the title page display to show the city 
+        $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
 
-    // update the title page display to show the city 
-    $("#eventsListTitle").text(`Top 20 Event Recommendations for ${city}`)
+        if (dateSelected) {
+            $("#eventsListDate").text(`Date Selected: ${dateSelected}`)
+        } else {
+            $("#eventsListDate").text(` `)
+        }
 
-    // call the TicketMaster Ajax function
-    searchTicketMaster(city, dateSelected)
-    geocodePlace(city)
-    searchBreweries()
+        // call the TicketMaster Ajax function
+        searchTicketMaster(city, dateSelected)
+        geocodePlace(city)
+        searchBreweries()
+
+    } else {
+        $("#notice").text(`Please select a city`)
+    }
+
+    // clear the search bar
+    $("#searchCity").val("")
+    $("#date").val("")
 }
 
 
@@ -169,8 +181,10 @@ function updateEvents(response) {
         // save the first event's longitutde and latitude to local storage to use later as the default location on page load
         if (i === 0) {
             // get location for later
-            var location = currentEvent["_embedded"]["venues"][0]["city"]["name"];
-            console.log(location)
+            var location = {
+                lat: currentEvent["_embedded"]["venues"][0]["location"]["latitude"],
+                lng: currentEvent["_embedded"]["venues"][0]["location"]["longitude"]
+            }
             localStorage.setItem("lastCitySearched", JSON.stringify(location))
         }
     }
@@ -181,10 +195,21 @@ function updateEvents(response) {
 // default location if nothing in local storage
 let map;
 
-var defaultLocation = {
-    lat: 47.6,
-    lng: -122.3
-};
+var lastLoctionFromStorage = JSON.parse(localStorage.getItem("lastCitySearched"))
+console.log(lastLoctionFromStorage)
+
+if (lastLoctionFromStorage !== null) {
+    var defaultLocation = {
+        lat: parseFloat(lastLoctionFromStorage.lat),
+        lng: parseFloat(lastLoctionFromStorage.lng)
+    }
+
+} else {
+    var defaultLocation = {
+        lat: 47.6,
+        lng: -122.3
+    };
+}
 
 var geocoder;
 var googleMapsOptions = {
@@ -221,24 +246,14 @@ function geocodePlace(completeAddress) {
         }
     })
 }
+// var previousEventLocation = localStorage.getItem("eventLocations")
 
-// var lastEventAddress = localStorage.getItem("completeAddress")
+// if (previousEventLocation) {
+//     lastAddressSearched = JSON.parse(previousEventLocation)
+//     lastAddressForPageLoad = lastAddressSearched[lastAddressSearched.length - 1]
+//     placeCity(lastAddressForPageLoad)
 
-// var lastCitySearched = localStorage.getItem("lastCitySearched")
-
-// if (lastCitySearched) {
-
-//     lastCitySearched = JSON.parse(lastCitySearched)
-
-//     console.log(lastCitySearched)
-
-//     placeCity(lastCitySearched)
-
-//     // googleMapsOptions = {
-//     //     zoom: 8,
-//     //     center: defaultLocation
-//     // }
-// };
+// }
 
 // when event/show breweries button is clicked, center map around the event location
 //  put marker on event location
@@ -251,10 +266,12 @@ $("#eventList").delegate(".button-rounded-hover", "click", function () {
     var state = eventArray._embedded.events[value]._embedded.venues[0].state.name;
     completeAddress = streetAddress + ", " + citySearched + " " + state
 
-    // console.log(streetAddress)
-    // console.log(citySearched)
-    // console.log(completeAddress)
+    // // create array for event locations clicked
+    // var previousEventLocation = []
 
+    // // save the location array to local storage
+    // previousEventLocation.push(completeAddress)
+    // localStorage.setItem("eventLocations", JSON.stringify(previousEventLocation))
 
     placeCity(completeAddress)
 })
