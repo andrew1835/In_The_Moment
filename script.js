@@ -14,7 +14,6 @@ if (citiesInLocalStorage) {
 
 
 // onclick event to run the event search query when the user clicks the search button
-
 $("#target").submit(function (event) {
     event.preventDefault();
     deleteMarkers();
@@ -29,6 +28,7 @@ $("#searchBtn").on("click", function () {
 })
 
 function searchEngine() {
+    $("#notice").text(` `)
     city = $("#searchCity").val()
     var dateSelected = $("#date").val()
 
@@ -71,9 +71,7 @@ function searchTicketMaster(city, startDate) {
     } else {
         formattedDate = new Date().toISOString().split('.')[0] + "Z"; // today
     }
-    // console.log(formattedDate)
 
-    // var formattedDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString();
     // run the query based on the new city
     var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&startDateTime=${formattedDate}&sort=date,asc&apikey=${apiKey}`;
 
@@ -108,12 +106,12 @@ function searchBreweries() {
                 breArr.push(breObj)
             }
             for (let j = 0; j < breArr.length; j++) {
-              
-                
+
+
                 geocoder.geocode({
                     'address': breArr[j].address
                 }, function (results, status) {
-    
+
                     if (status === "OK") {
                         // adds marker to that coordinate
                         addBreweryMarker(results[0].geometry.location, breArr[j].brewery)
@@ -203,7 +201,7 @@ function updateEvents(response) {
 }
 
 
-// default location if nothing in local storage
+// default location on page load to the last location searched / saved to local storage
 let map;
 
 var lastLoctionFromStorage = JSON.parse(localStorage.getItem("lastCitySearched"))
@@ -227,7 +225,6 @@ var googleMapsOptions = {
     zoom: 8,
     center: defaultLocation
 }
-
 
 // load map on screen
 function initMap() {
@@ -257,17 +254,8 @@ function geocodePlace(completeAddress) {
         }
     })
 }
-// var previousEventLocation = localStorage.getItem("eventLocations")
 
-// if (previousEventLocation) {
-//     lastAddressSearched = JSON.parse(previousEventLocation)
-//     lastAddressForPageLoad = lastAddressSearched[lastAddressSearched.length - 1]
-//     placeCity(lastAddressForPageLoad)
-
-// }
-
-// when event/show breweries button is clicked, center map around the event location
-//  put marker on event location
+// create show on map buttons for all the events in the list
 
 $("#eventList").delegate(".button-rounded-hover", "click", function () {
     deleteMarkers();
@@ -277,18 +265,11 @@ $("#eventList").delegate(".button-rounded-hover", "click", function () {
     var state = eventArray._embedded.events[value]._embedded.venues[0].state.name;
     completeAddress = streetAddress + ", " + citySearched + " " + state
 
-    // // create array for event locations clicked
-    // var previousEventLocation = []
-
-    // // save the location array to local storage
-    // previousEventLocation.push(completeAddress)
-    // localStorage.setItem("eventLocations", JSON.stringify(previousEventLocation))
-
+    // call the google maps function based off the event location
     placeCity(completeAddress)
 })
 
-
-
+// populate the map with the brewery markers
 var markers = [];
 var breweryMarkers = [];
 
