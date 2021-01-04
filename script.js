@@ -111,43 +111,59 @@ function updateEvents(response) {
 
     for (let i = 0; i < 20; i++) {
         var currentEvent = response._embedded.events[i];
+        console.log(currentEvent);
+        var imageURL = currentEvent.images[1].url;
+        console.log(imageURL)
         var url = currentEvent.url;
         var eventName = currentEvent.name;
         var rawDate = currentEvent.dates.start.dateTime;
         var formattedDate = new Date(rawDate).toDateString();
 
         // event div
-        var wrapperDiv = $("<div>")
+        var wrapperDiv = $("<div>");
+        wrapperDiv.addClass("eventItem")
 
+        // create image
+        var image = $("<img>");
+        image.attr("src", imageURL);
+        image.attr("alt", eventName);
+        image.attr("width", "30%");
+        image.attr("height", "90%");
+        image.addClass("float-left");
+        
         // create link 
-        var link = $("<a></a>")
-        link.text("Link to Event")
-        link.attr("href", url)
-        link.attr("target", "_blank")
-
+        var link = $("<a></a>");
+        link.text("Link to Event");
+        link.attr("href", url);
+        link.attr("target", "_blank");
+        // link.addClass("float-left");
+        
         // create event name and date
-        var nameDiv = $("<div>")
-        nameDiv.append(eventName)
-
-        var dateDiv = $("<div>")
-        dateDiv.append(formattedDate)
+        var nameDiv = $("<div>");
+        nameDiv.append(eventName);
+        // nameDiv.addClass("float-left");
+        
+        var dateDiv = $("<div>");
+        dateDiv.append(formattedDate);
+        // dateDiv.addClass("float-left");
 
         // create button 
-        var showButton = $("<button>")
-        showButton.text("Show on Map")
-        showButton.addClass("button button-rounded-hover")
-        showButton.attr("value", i)
+        var showButton = $("<button>");
+        showButton.text("Show on Map");
+        showButton.addClass("button button-rounded-hover");
+        showButton.attr("value", i);
 
         // append all items to page
-        wrapperDiv.append(nameDiv)
-        wrapperDiv.append(dateDiv)
+        wrapperDiv.append(image);
+        wrapperDiv.append(nameDiv);
+        wrapperDiv.append(dateDiv);
 
-        wrapperDiv.append(link)
-        wrapperDiv.append(" ")
-        wrapperDiv.append(showButton)
-        wrapperDiv.append("<br><hr>")
+        wrapperDiv.append(link);
+        wrapperDiv.append(" ");
+        wrapperDiv.append(showButton);
+        wrapperDiv.append("<br><hr>");
 
-        eventBucket.append(wrapperDiv)
+        eventBucket.append(wrapperDiv);
 
         // save the first event's longitutde and latitude to local storage to use later as the default location on page load
         if (i === 0) {
