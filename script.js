@@ -2,7 +2,6 @@ var citiesSearched = []
 var city = ""
 var eventArray;
 var citiesInLocalStorage = localStorage.getItem("cities")
-var lastLocationCoordinates = localStorage.getItem("lastLocationCoordinates")
 
 // import the string of cities in local storage
 if (citiesInLocalStorage) {
@@ -15,6 +14,14 @@ if (citiesInLocalStorage) {
 // onclick event to run the event search query when the user clicks the search button
 $("#target").submit(function (event) {
     event.preventDefault();
+    searchEngine();
+})
+
+$("#searchBtn").on("click", function () {
+    searchEngine();
+})
+
+function searchEngine() {
     city = $("#searchCity").val()
     console.log(city)
     var dateSelected = $("#date").val()
@@ -32,8 +39,8 @@ $("#target").submit(function (event) {
     // call the TicketMaster Ajax function
     searchTicketMaster(city, dateSelected)
     placeCity(city)
-
-})
+    searchBreweries()
+}
 
 
 // search for events based on the city searched
@@ -64,6 +71,33 @@ function searchTicketMaster(city, startDate) {
         eventArray = response;
     })
 }
+
+function searchBreweries() {
+
+    if ($("#includeBreweries").is(":checked")) {
+
+        $.ajax({
+            url: `https://api.openbrewerydb.org/breweries?by_city=${city}`,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response)
+            //  put markers on every nearby brewery
+            for (var i = 0; i < response.length; i++) {
+                geocoder.geocode({
+                    'address': response[i].street + response[i].city
+                }, function (results, status) {
+                    if (status === "OK") {
+                        // adds marker to that coordinate
+                        addBreweryMarker(results[0].geometry.location)
+                    }
+                })
+            }
+        })
+    }
+
+
+}
+
 
 function clearPreviousSearches() {
     $(".eventList").empty();
@@ -118,12 +152,14 @@ function updateEvents(response) {
         // save the first event's longitutde and latitude to local storage to use later as the default location on page load
         if (i === 0) {
             // get location for later
-            var location = currentEvent["_embedded"]["venues"][0]["location"];
-            localStorage.setItem("lastLocationCoordinates", JSON.stringify(location))
+            var location = currentEvent["_embedded"]["venues"][0]["city"]["name"];
+            console.log(location)
+            localStorage.setItem("lastCitySearched", JSON.stringify(location))
         }
     }
 
 }
+
 
 // default location if nothing in local storage
 let map;
@@ -140,24 +176,6 @@ var googleMapsOptions = {
 }
 
 
-var lastLocationCoordinates = localStorage.getItem("lastLocationCoordinates")
-
-if (lastLocationCoordinates) {
-
-    lastLocationCoordinates = JSON.parse(lastLocationCoordinates)
-
-    var defaultLocation = {
-        lat: parseInt(lastLocationCoordinates.latitude),
-        lng: parseInt(lastLocationCoordinates.longitude)
-    };
-
-    googleMapsOptions = {
-        zoom: 8,
-        center: defaultLocation
-    }
-};
-
-
 // load map on screen
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), googleMapsOptions);
@@ -167,12 +185,12 @@ function initMap() {
 // when search button is clicked, center map around the city search
 // change center to whatever is passed
 
-function placeCity(city) {
+function placeCity(completeAddress) {
     // deletes markers from previous searches
     deleteMarkers();
     // returns lat and long of city name
     geocoder.geocode({
-        'address': city
+        'address': completeAddress
     }, function (results, status) {
         if (status === "OK") {
             // centers map around that coordinate
@@ -183,37 +201,41 @@ function placeCity(city) {
     })
 }
 
+// var lastEventAddress = localStorage.getItem("completeAddress")
+
+// var lastCitySearched = localStorage.getItem("lastCitySearched")
+
+// if (lastCitySearched) {
+
+//     lastCitySearched = JSON.parse(lastCitySearched)
+
+//     console.log(lastCitySearched)
+
+//     placeCity(lastCitySearched)
+
+//     // googleMapsOptions = {
+//     //     zoom: 8,
+//     //     center: defaultLocation
+//     // }
+// };
 
 // when event/show breweries button is clicked, center map around the event location
 //  put marker on event location
 
-
 $("#eventList").delegate(".button-rounded-hover", "click", function () {
     deleteMarkers();
     var value = $(this).attr("value");
-    var address = eventArray._embedded.events[value]._embedded.venues[0].name;
-    placeCity(address)
+    var streetAddress = eventArray._embedded.events[value]._embedded.venues[0].address.line1;
+    citySearched = eventArray._embedded.events[value]._embedded.venues[0].city.name;
+    var state = eventArray._embedded.events[value]._embedded.venues[0].state.name;
+    var completeAddress = streetAddress + ", " + citySearched + " " + state
 
-    if ($("#includeBreweries").is(":checked")) {
+    console.log(streetAddress)
+    console.log(citySearched)
+    console.log(completeAddress)
 
-        $.ajax({
-            url: `https://api.openbrewerydb.org/breweries?by_city=${eventArray._embedded.events[value]._embedded.venues[0].city.name}`,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response)
-            //  put markers on every nearby brewery
-            for (var i = 0; i < response.length; i++) {
-                geocoder.geocode({
-                    'address': response[i].street + response[i].city
-                }, function (results, status) {
-                    if (status === "OK") {
-                        // adds marker to that coordinate
-                        addBreweryMarker(results[0].geometry.location)
-                    }
-                })
-            }
-        })
-    }
+
+    placeCity(completeAddress)
 })
 
 
