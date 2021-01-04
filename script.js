@@ -2,6 +2,7 @@ var citiesSearched = []
 var city = ""
 var eventArray;
 var citiesInLocalStorage = localStorage.getItem("cities")
+var completeAddress = ""
 
 // import the string of cities in local storage
 if (citiesInLocalStorage) {
@@ -131,23 +132,21 @@ function updateEvents(response) {
         image.attr("alt", eventName);
         image.attr("width", "30%");
         image.attr("height", "90%");
-        image.addClass("float-left");
-        
+        image.addClass("eventImage");
+
         // create link 
         var link = $("<a></a>");
         link.text("Link to Event");
         link.attr("href", url);
         link.attr("target", "_blank");
-        // link.addClass("float-left");
-        
+
         // create event name and date
         var nameDiv = $("<div>");
+        nameDiv.addClass("eventNameTitle")
         nameDiv.append(eventName);
-        // nameDiv.addClass("float-left");
-        
+
         var dateDiv = $("<div>");
         dateDiv.append(formattedDate);
-        // dateDiv.addClass("float-left");
 
         // create button 
         var showButton = $("<button>");
@@ -209,6 +208,7 @@ function placeCity(completeAddress) {
     geocodePlace(completeAddress);
     // returns lat and long of city name
 }
+
 function geocodePlace(completeAddress) {
     geocoder.geocode({
         'address': completeAddress
@@ -249,11 +249,11 @@ $("#eventList").delegate(".button-rounded-hover", "click", function () {
     var streetAddress = eventArray._embedded.events[value]._embedded.venues[0].address.line1;
     citySearched = eventArray._embedded.events[value]._embedded.venues[0].city.name;
     var state = eventArray._embedded.events[value]._embedded.venues[0].state.name;
-    var completeAddress = streetAddress + ", " + citySearched + " " + state
+    completeAddress = streetAddress + ", " + citySearched + " " + state
 
-    console.log(streetAddress)
-    console.log(citySearched)
-    console.log(completeAddress)
+    // console.log(streetAddress)
+    // console.log(citySearched)
+    // console.log(completeAddress)
 
 
     placeCity(completeAddress)
