@@ -15,6 +15,8 @@ if (citiesInLocalStorage) {
 // onclick event to run the event search query when the user clicks the search button
 $("#target").submit(function (event) {
     event.preventDefault();
+    deleteMarkers();
+    deleteBreweryMarkers();
     searchEngine();
 })
 
@@ -57,7 +59,7 @@ function searchTicketMaster(city, startDate) {
     } else {
         formattedDate = new Date().toISOString().split('.')[0] + "Z"; // today
     }
-    console.log(formattedDate)
+    // console.log(formattedDate)
 
     // var formattedDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString();
     // run the query based on the new city
@@ -67,16 +69,16 @@ function searchTicketMaster(city, startDate) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
         clearPreviousSearches()
         updateEvents(response)
 
         eventArray = response;
     })
 }
+var breArr = []
 
 function searchBreweries() {
-
+    deleteBreweryMarkers();
     if ($("#includeBreweries").is(":checked")) {
 
         $.ajax({
@@ -86,12 +88,23 @@ function searchBreweries() {
             console.log(response)
             //  put markers on every nearby brewery
             for (var i = 0; i < response.length; i++) {
+                var breweryName = response[i].name;
+                var breObj = {
+                    brewery: breweryName,
+                    address: response[i].street + response[i].city
+                }
+                breArr.push(breObj)
+            }
+            for (let j = 0; j < breArr.length; j++) {
+              
+                
                 geocoder.geocode({
-                    'address': response[i].street + response[i].city
+                    'address': breArr[j].address
                 }, function (results, status) {
+    
                     if (status === "OK") {
                         // adds marker to that coordinate
-                        addBreweryMarker(results[0].geometry.location)
+                        addBreweryMarker(results[0].geometry.location, breArr[j].brewery)
                     }
                 })
             }
@@ -114,9 +127,7 @@ function updateEvents(response) {
 
     for (let i = 0; i < 20; i++) {
         var currentEvent = response._embedded.events[i];
-        console.log(currentEvent);
         var imageURL = currentEvent.images[1].url;
-        console.log(imageURL)
         var url = currentEvent.url;
         var eventName = currentEvent.name;
         var rawDate = currentEvent.dates.start.dateTime;
@@ -170,7 +181,6 @@ function updateEvents(response) {
         if (i === 0) {
             // get location for later
             var location = currentEvent["_embedded"]["venues"][0]["city"]["name"];
-            console.log(location)
             localStorage.setItem("lastCitySearched", JSON.stringify(location))
         }
     }
@@ -269,16 +279,18 @@ function addMarker(location) {
         position: location,
         map: map,
     })
+    console.log("added place marker at " + location)
     markers.push(marker)
 }
 
-function addBreweryMarker(location) {
+function addBreweryMarker(location, breweryName) {
     const marker = new google.maps.Marker({
         position: location,
         map: map,
         icon: {
             url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        }
+        },
+        title: breweryName
     })
     breweryMarkers.push(marker)
 }
@@ -303,4 +315,5 @@ function deleteMarkers() {
 function deleteBreweryMarkers() {
     setMapOnBreweries(null);
     breweryMarkers = [];
+    breArr = [];
 }
