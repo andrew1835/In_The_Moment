@@ -18,6 +18,8 @@ $("#target").submit(function (event) {
 })
 
 $("#searchBtn").on("click", function () {
+    deleteMarkers();
+    deleteBreweryMarkers();
     searchEngine();
 })
 
@@ -38,7 +40,7 @@ function searchEngine() {
 
     // call the TicketMaster Ajax function
     searchTicketMaster(city, dateSelected)
-    placeCity(city)
+    geocodePlace(city)
     searchBreweries()
 }
 
@@ -204,15 +206,18 @@ function initMap() {
 function placeCity(completeAddress) {
     // deletes markers from previous searches
     deleteMarkers();
+    geocodePlace(completeAddress);
     // returns lat and long of city name
+}
+function geocodePlace(completeAddress) {
     geocoder.geocode({
         'address': completeAddress
     }, function (results, status) {
         if (status === "OK") {
             // centers map around that coordinate
-            map.setCenter(results[0].geometry.location)
+            map.setCenter(results[0].geometry.location);
             // adds marker to that coordinate
-            addMarker(results[0].geometry.location)
+            addMarker(results[0].geometry.location);
         }
     })
 }
@@ -257,6 +262,7 @@ $("#eventList").delegate(".button-rounded-hover", "click", function () {
 
 
 var markers = [];
+var breweryMarkers = [];
 
 function addMarker(location) {
     const marker = new google.maps.Marker({
@@ -274,16 +280,27 @@ function addBreweryMarker(location) {
             url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         }
     })
-    markers.push(marker)
+    breweryMarkers.push(marker)
 }
 
-function setMapOnAll(map) {
+function setMapOnEvents(map) {
     for (let i = 0; i < markers.length; i++) {
         markers[i].setMap(map);
     }
 }
 
+function setMapOnBreweries(map) {
+    for (let i = 0; i < breweryMarkers.length; i++) {
+        breweryMarkers[i].setMap(map);
+    }
+}
+
 function deleteMarkers() {
-    setMapOnAll(null);
+    setMapOnEvents(null);
     markers = [];
+}
+
+function deleteBreweryMarkers() {
+    setMapOnBreweries(null);
+    breweryMarkers = [];
 }
