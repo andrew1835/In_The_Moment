@@ -32,11 +32,11 @@ Discover events and breweries in the US by city.
 ### Screenshots: ###
 
 * This first screenshot is of the Application's home page when you open it for the first time
-<img src = "HomeScreen.jpg"  alt = "home screen">
+<img src = "Assets/HomeScreen.jpg"  alt = "home screen">
 
 * The second screenshot shows what happens when you search for events in Seattle around the date of February 18th and have checked the box for breweries. As you can see, a list of events with relevant event information appears, and the map is populated with blue pins to mark the location of breweries in the event area.
-<img src = "SeattleSearch.jpg"  alt = "Seattle search">
+<img src = "Assets/SeattleSearch.jpg"  alt = "Seattle search">
 
 * This final screenshot shows the content on the Contact Us page
-<img src = "ContactUsPage.jpg"  alt = "Contact Us content">
+<img src = "Assets/ContactUsPage.jpg"  alt = "Contact Us content">
 
